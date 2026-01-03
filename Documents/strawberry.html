@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Dear Nidhi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(to bottom, #ffb6c1, #ff69b4);
+            color: #8b0000;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            max-width: 800px;
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #8b0000;
+            text-shadow: 0 0 5px rgba(255, 182, 193, 0.7);
+        }
+
+        .message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #8b0000;
+            line-height: 1.6;
+        }
+
+        .counter {
+            font-size: 3rem;
+            margin: 2rem 0;
+            color: #8b0000;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .strawberry-icon {
+            font-size: 2.5rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        .poetry {
+            font-style: italic;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            line-height: 1.8;
+            color: #8b0000;
+        }
+
+        .heart {
+            color: #8b0000;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Strawberry falling effect */
+        .strawberries {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .strawberry {
+            position: absolute;
+            top: -50px;
+            width: 40px;
+            height: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%238B0000" d="M50,10 C60,5 75,10 80,20 C85,30 90,40 85,50 C80,60 70,65 60,70 C50,75 40,75 30,70 C20,65 15,60 10,50 C5,40 10,30 15,20 C20,10 40,15 50,10 Z"/><circle cx="35" cy="30" r="5" fill="%23FFFFFF"/><circle cx="50" cy="25" r="5" fill="%23FFFFFF"/><circle cx="65" cy="30" r="5" fill="%23FFFFFF"/><circle cx="45" cy="40" r="5" fill="%23FFFFFF"/><circle cx="60" cy="45" r="5" fill="%23FFFFFF"/><path fill="%23008000" d="M50,10 L55,0 L45,0 Z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Strawberries falling background -->
+    <div class="strawberries" id="strawberries"></div>
+    
+    <!-- Main content -->
+    <div class="container">
+        <h1>For My Dear Nidhi <span class="heart">♥</span></h1>
+        
+        <div class="message">
+            I miss you so muchhhhh! Every second without you feels like forever.
+        </div>
+        
+        <div class="counter">
+            <span class="strawberry-icon">🍓</span>
+            <span id="strawberry-counter">0</span>
+            <span class="strawberry-icon">🍓</span>
+        </div>
+        
+        <div class="poetry">
+            <p>strawberries for most beautiful girl in the world </p>
+            <p>these strawberries are for every secod i misses you tho! </p>so you can assume i might reach infinity soon bcz i think of you every moment </p>
+        </div>
+    </div>
+
+    <script>
+        // Create strawberry falling effect
+        function createStrawberries() {
+            const strawberriesContainer = document.getElementById('strawberries');
+            const counterElement = document.getElementById('strawberry-counter');
+            let strawberryCount = 0;
+            
+            function addStrawberry() {
+                const strawberry = document.createElement('div');
+                strawberry.classList.add('strawberry');
+                
+                // Random properties for each strawberry
+                const left = Math.random() * 100;
+                const animationDuration = Math.random() * 3 + 3; // 3-6 seconds
+                const size = Math.random() * 20 + 30; // 30-50px
+                
+                strawberry.style.left = left + 'vw';
+                strawberry.style.animationDuration = animationDuration + 's';
+                strawberry.style.width = size + 'px';
+                strawberry.style.height = size + 'px';
+                
+                strawberriesContainer.appendChild(strawberry);
+                
+                // Update counter
+                strawberryCount++;
+                counterElement.textContent = strawberryCount;
+                
+                // Remove strawberry after animation completes
+                setTimeout(() => {
+                    strawberry.remove();
+                }, animationDuration * 1000);
+            }
+            
+            // Add a strawberry every second
+            setInterval(addStrawberry, 1000);
+            
+            // Add initial strawberries
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => addStrawberry(), i * 200);
+            }
+        }
+        
+        // Initialize everything when page loads
+        window.onload = function() {
+            createStrawberries();
+        };
+    </script>
+</body>
+</html>

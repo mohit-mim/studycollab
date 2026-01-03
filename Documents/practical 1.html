@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>jQuery: Change BG, Fade Out, Slide Up</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    #myBox {
+      width: 400px;
+      height: 180px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 30px auto;
+      box-sizing: border-box;
+      text-align: center;
+      line-height: 140px;
+      font-family: Arial, sans-serif;
+      font-size: 20px;
+    }
+
+    .controls { text-align:center; margin-top:10px; }
+    button { padding:8px 14px; margin:6px; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<div id="myBox">This is the DIV</div>
+
+<div class="controls">
+  <button id="doIt">Change BG → Fade → Slide Up</button>
+  <button id="reset">Reset</button>
+</div>
+
+<script>
+$(function(){
+  $('#doIt').on('click', function(){
+    // 1) change background color (instant)
+    $('#myBox').css('background-color', '#ffdd57');
+
+    // 2) fade to opacity 0 over 1s, then slide up over 0.8s
+    $('#myBox').fadeTo(1000, 0, function(){
+      // after fade completed, slideUp to collapse height
+      $(this).slideUp(800);
+    });
+  });
+
+  $('#reset').on('click', function(){
+    // restore to original state
+    $('#myBox')
+      .stop(true, true)           // stop any running animations
+      .css({ 'background-color': '#f2f2f2', opacity: 1 })
+      .show();                    // show and reset height
+  });
+});
+</script>
+
+</body>
+</html>

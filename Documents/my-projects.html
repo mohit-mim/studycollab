@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects | StudyCollab</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border-radius: 8px;
+            color: var(--text-primary);
+            width: 300px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // Redirect if not authenticated
+        if (!localStorage.getItem('vsp_user')) {
+            window.location.href = ".vscode/login.html";
+        }
+    </script>
+
+    <header class="top-header">
+        <div class="header-left">
+            <div class="header-tabs">
+                <a href="mohit-proj.html" class="header-tab">Dashboard</a>
+                <a href="mohit-proj1.html" class="header-tab">Code Editor</a>
+            </div>
+        </div>
+        <div class="header-center">
+            <button id="desktop-view-btn" class="icon-btn active"><i class="fas fa-desktop"></i></button>
+            <button id="mobile-view-btn" class="icon-btn"><i class="fas fa-mobile-alt"></i></button>
+        </div>
+        <div class="header-right">
+            <button id="theme-toggle" class="btn btn-secondary" onclick="toggleTheme()"><i class="fas fa-moon"></i> Dark
+                Mode</button>
+            <button class="btn btn-publish">Publish</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <div class="logo-text">
+                    <h2>StudyCollab</h2>
+                    <span>Virtual Learning Platform</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <p>MAIN MENU</p>
+                <nav class="sidebar-nav">
+                    <a href="mohit-proj.html" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="my-projects.html" class="nav-item active">
+                        <i class="fas fa-folder-open"></i>
+                        <span>My Projects</span>
+                    </a>
+                    <a href="mohit-proj1.html" class="nav-item">
+                        <i class="fas fa-code"></i>
+                        <span>Code Editor</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-tasks"></i>
+                        <span>Assignments</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Study Groups</span>
+                    </a>
+                </nav>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <span id="userName">User</span>
+                    <button onclick="logout()" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h2><i class="fas fa-folder-open"></i> My Saved Files</h2>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="project-search" class="search-input" placeholder="Search saved files...">
+                </div>
+            </div>
+
+            <div class="project-list" id="all-projects-list"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+                <!-- Saved files will be injected here by script.js -->
+                <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-secondary);">
+                    Loading saved files...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="file-manager.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

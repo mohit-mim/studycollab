@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor | StudyCollab</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* File Explorer Styles */
+        .file-explorer {
+            width: 250px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .file-explorer-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-explorer-header h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .add-file-btn {
+            background: none;
+            border: none;
+            color: var(--primary-accent);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .add-file-btn:hover {
+            background: var(--primary-accent-light);
+        }
+
+        .file-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .file-item {
+            padding: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .file-item:hover {
+            background: var(--primary-accent-light);
+        }
+
+        .file-item.active {
+            background: var(--primary-accent);
+            color: white;
+        }
+
+        .file-item i {
+            font-size: 0.875rem;
+        }
+
+        .file-item .file-name {
+            flex: 1;
+            font-size: 0.875rem;
+        }
+
+        .file-item .file-actions {
+            display: none;
+            gap: 0.25rem;
+        }
+
+        .file-item:hover .file-actions {
+            display: flex;
+        }
+
+        .file-action-btn {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            transition: background 0.2s ease;
+        }
+
+        .file-action-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Tab Bar */
+        .editor-tabs {
+            display: flex;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+            padding: 0 1rem;
+        }
+
+        .editor-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .editor-tab:hover {
+            background: var(--primary-accent-light);
+        }
+
+        .editor-tab.active {
+            border-bottom-color: var(--primary-accent);
+            color: var(--primary-accent);
+            font-weight: 600;
+        }
+
+        .editor-tab .close-tab {
+            margin-left: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .editor-tab:hover .close-tab {
+            opacity: 1;
+        }
+
+        /* Output Console Tabs */
+        .output-tabs {
+            display: flex;
+            background: var(--card-bg);
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .output-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .output-tab:hover {
+            background: var(--primary-accent-light);
+        }
+
+        .output-tab.active {
+            background: var(--primary-accent);
+            color: white;
+        }
+
+        .output-content {
+            display: none;
+        }
+
+        .output-content.active {
+            display: block;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: var(--sidebar-bg);
+            border-top: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .status-bar-left,
+        .status-bar-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .editor-main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        const user = localStorage.getItem('vsp_user');
+        if (!user) {
+            window.location.href = ".vscode/login.html";
+        }
+    </script>
+
+    <header class="top-header">
+        <div class="header-left">
+            <div class="header-tabs">
+                <a href="mohit-proj.html" class="header-tab">Dashboard</a>
+                <a href="mohit-proj1.html" class="header-tab active">Code Editor</a>
+            </div>
+        </div>
+        <div class="header-center">
+            <button id="desktop-view-btn" class="icon-btn active"><i class="fas fa-desktop"></i></button>
+            <button id="mobile-view-btn" class="icon-btn"><i class="fas fa-mobile-alt"></i></button>
+        </div>
+        <div class="header-right">
+            <button class="btn btn-publish">Publish</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <div class="logo-text">
+                    <h2>StudyCollab</h2>
+                    <span>Virtual Learning Platform</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <p>MAIN MENU</p>
+                <nav class="sidebar-nav">
+                    <a href="mohit-proj.html" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="mohit-proj1.html" class="nav-item active">
+                        <i class="fas fa-code"></i>
+                        <span>Code Editor</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-tasks"></i>
+                        <span>Assignments</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Study Groups</span>
+                    </a>
+                </nav>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <span id="userName"></span>
+                    <button onclick="logout()" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="editor-workspace">
+            <!-- File Explorer -->
+            <div class="file-explorer">
+                <div class="file-explorer-header">
+                    <h3>Files</h3>
+                    <button class="add-file-btn" id="add-file-btn" title="New File">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="file-list" id="file-list">
+                    <!-- Files will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Editor Area -->
+            <div class="editor-main-area">
+                <!-- Tab Bar -->
+                <div class="editor-tabs" id="editor-tabs">
+                    <!-- Tabs will be dynamically inserted here -->
+                </div>
+
+                <!-- Toolbar -->
+                <div class="editor-toolbar">
+                    <div class="toolbar-left">
+                        <select id="language-select" class="language-select">
+                            <option value="javascript">JavaScript</option>
+                            <option value="cpp">C++</option>
+                            <option value="python">Python</option>
+                            <option value="html">HTML</option>
+                            <option value="java">Java</option>
+                        </select>
+                        <button id="templates-btn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                            <i class="fas fa-code"></i> Templates
+                        </button>
+                    </div>
+                    <div class="toolbar-right">
+                        <button id="run-btn" class="btn btn-run"><i class="fas fa-play"></i> Run</button>
+                        <button id="save-btn" class="btn btn-save"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </div>
+
+                <!-- Editor Content -->
+                <div class="editor-content">
+                    <div id="editor" style="height: 450px;"></div>
+                </div>
+
+                <!-- Status Bar -->
+                <div class="status-bar">
+                    <div class="status-bar-left">
+                        <span id="status-language">JavaScript</span>
+                        <span id="status-position">Ln 1, Col 1</span>
+                    </div>
+                    <div class="status-bar-right">
+                        <span id="status-autosave">Auto-save: On</span>
+                        <span id="status-encoding">UTF-8</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Output Panel -->
+            <div class="output-area">
+                <div class="output-tabs">
+                    <button class="output-tab active" data-tab="output">Output</button>
+                    <button class="output-tab" data-tab="console">Console</button>
+                    <button class="output-tab" data-tab="problems">Problems</button>
+                </div>
+                <div class="output-header">
+                    <h3><i class="fas fa-chevron-right"></i> <span id="output-title">Output</span></h3>
+                    <div class="output-actions">
+                        <button id="download-output-btn" class="icon-btn" title="Download Output">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button id="copy-output-btn" class="icon-btn" title="Copy Output">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button id="clear-output-btn" class="icon-btn" title="Clear Output">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="output-content active" data-content="output">
+                    <pre id="output" class="output-box">Click 'Run' to execute your code</pre>
+                </div>
+
+                <div class="output-content" data-content="console">
+                    <pre id="console-output" class="output-box">Console output will appear here...</pre>
+                </div>
+
+                <div class="output-content" data-content="problems">
+                    <pre id="problems-output" class="output-box">No problems detected</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script src="file-manager.js"></script>
+    <script src="templates.js"></script>
+    <script src="view-toggle.js"></script>
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

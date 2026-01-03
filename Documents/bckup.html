@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor | StudyCollab</title>
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+</head>
+<body class="light-theme">
+    <div class="app-container">
+        <header class="top-header">
+            <div class="header-left">
+                <div class="header-tabs">
+                    <button class="header-tab" id="dashboard-tab">
+                        <i class="fas fa-home"></i> Dashboard
+                    </button>
+                    <button class="header-tab active" id="editor-tab">
+                        <i class="fas fa-code"></i> Code Editor
+                    </button>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="view-toggle">
+                    <button id="desktop-view-btn" class="icon-btn active" title="Desktop View">
+                        <i class="fas fa-desktop"></i>
+                    </button>
+                    <button id="mobile-view-btn" class="icon-btn" title="Mobile View">
+                        <i class="fas fa-mobile-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="api-status">
+                    <span class="status-dot online"></span>
+                    <span class="status-text">API Online</span>
+                </div>
+                <button id="theme-toggle" class="btn btn-secondary">
+                    <i class="fas fa-moon"></i> <span class="btn-text">Dark Mode</span>
+                </button>
+                <button class="btn btn-publish"><i class="fas fa-rocket"></i> Publish</button>
+            </div>
+        </header>
+
+        <div class="dashboard-container">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-graduation-cap logo-icon"></i>
+                    <div class="logo-text">
+                        <h2>StudyCollab</h2>
+                        <span>Virtual Learning Platform</span>
+                    </div>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <p class="nav-section">MAIN MENU</p>
+                    <button class="nav-item" id="sidebar-dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-item active" id="sidebar-editor">
+                        <i class="fas fa-code"></i>
+                        <span>Code Editor</span>
+                        <span class="nav-badge">Live</span>
+                    </button>
+                    <button class="nav-item">
+                        <i class="fas fa-tasks"></i>
+                        <span>Assignments</span>
+                    </button>
+                    <button class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Study Groups</span>
+                    </button>
+
+                    <p class="nav-section">PROJECTS</p>
+                    <div class="project-list">
+                        <button class="project-item active" data-project="algorithms">
+                            <i class="fas fa-folder"></i>
+                            <span>Algorithms</span>
+                            <span class="project-status active">JS</span>
+                        </button>
+                        <button class="project-item" data-project="webdev">
+                            <i class="fas fa-folder"></i>
+                            <span>Web Dev</span>
+                            <span class="project-status">HTML</span>
+                        </button>
+                        <button class="project-item" data-project="datascience">
+                            <i class="fas fa-folder"></i>
+                            <span>Data Science</span>
+                            <span class="project-status">PY</span>
+                        </button>
+                    </div>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <span id="userName" class="user-name">Loading...</span>
+                            <span class="user-role">Student</span>
+                        </div>
+                        <button id="logout-btn" class="logout-btn" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="editor-layout">
+                    <div class="editor-section">
+                        <div class="editor-header">
+                            <div class="file-info">
+                                <i class="fas fa-file-code"></i>
+                                <span class="filename">main.js</span>
+                                <span class="file-status saved"><i class="fas fa-check"></i> Saved</span>
+                            </div>
+                            <div class="editor-controls">
+                                <div class="control-group">
+                                    <label for="language-select"><i class="fas fa-code"></i></label>
+                                    <select id="language-select" class="language-select">
+                                        <option value="63">JavaScript</option>
+                                        <option value="71">Python</option>
+                                        <option value="54">C++</option>
+                                        <option value="68">HTML</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="theme-select"><i class="fas fa-palette"></i></label>
+                                    <select id="theme-select" class="theme-select">
+                                        <option value="vs-dark">Dark</option>
+                                        <option value="vs">Light</option>
+                                        <option value="hc-black">High Contrast</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-save"><i class="fas fa-save"></i> Save</button>
+                                <button id="run-btn" class="btn btn-run"><i class="fas fa-play"></i> Run Code</button>
+                            </div>
+                        </div>
+                        
+                        <div class="editor-container">
+                            <div id="editor" class="code-editor"></div>
+                        </div>
+                    </div>
+
+                    <div class="output-section">
+                        <div class="output-header">
+                            <div class="output-title">
+                                <i class="fas fa-terminal"></i>
+                                <h3>Output Console</h3>
+                            </div>
+                            <div class="output-actions">
+                                <button id="clear-output-btn" class="icon-btn" title="Clear Output">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button id="copy-output-btn" class="icon-btn" title="Copy Output">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button id="download-output-btn" class="icon-btn" title="Download Output">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="output-content">
+                            <pre id="output" class="output-box">// Output will appear here after code execution
+Click 'Run Code' to execute your program</pre>
+                        </div>
+                        
+                        <div class="input-section">
+                            <div class="input-header">
+                                <i class="fas fa-keyboard"></i>
+                                <label for="stdin-input">Standard Input (STDIN)</label>
+                            </div>
+                            <textarea id="stdin-input" placeholder="Enter input for your program here... (Optional)" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script1.js"></script>
+</body>
+</html>

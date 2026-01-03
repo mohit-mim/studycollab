@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | StudyCollab</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <script>
+        // Redirect to login page if not authenticated
+        const user = localStorage.getItem('vsp_user');
+        if (!user) {
+            window.location.href = ".vscode/login.html";
+        }
+    </script>
+
+    <header class="top-header">
+        <div class="header-left">
+            <div class="header-tabs">
+                <a href="mohit-proj.html" class="header-tab active">Dashboard</a>
+                <a href="mohit-proj1.html" class="header-tab">Preview</a>
+            </div>
+        </div>
+        <div class="header-center">
+            <button id="desktop-view-btn" class="icon-btn active"><i class="fas fa-desktop"></i></button>
+            <button id="mobile-view-btn" class="icon-btn"><i class="fas fa-mobile-alt"></i></button>
+        </div>
+        <div class="header-right">
+            <button id="theme-toggle" class="btn btn-secondary" onclick="toggleTheme()"><i class="fas fa-moon"></i> Dark
+                Mode</button>
+            <button class="btn btn-publish">Publish</button>
+        </div>
+    </header>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <div class="logo-text">
+                    <h2>StudyCollab</h2>
+                    <span>Virtual Learning Platform</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <p>MAIN MENU</p>
+                <nav class="sidebar-nav">
+                    <a href="mohit-proj.html" class="nav-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="mohit-proj1.html" class="nav-item">
+                        <i class="fas fa-code"></i>
+                        <span>Code Editor</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-tasks"></i>
+                        <span>Assignments</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Study Groups</span>
+                    </a>
+                </nav>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <span id="userName"></span>
+                    <button onclick="logout()" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <div class="welcome-banner">
+                    <h2><i class="fas fa-bolt"></i> Welcome back, <span id="welcomeName">Mohit</span>!</h2>
+                    <p>Ready to dive back in? Your projects and assignments are waiting for you.</p>
+                    <div class="banner-actions">
+                        <button class="btn btn-primary" id="start-project-btn"><i class="fas fa-plus"></i> Start a New
+                            Project</button>
+                        <button class="btn btn-secondary"><i class="fas fa-user-plus"></i> Join a Group</button>
+                    </div>
+                </div>
+            </header>
+
+            <section class="stats-grid">
+                <div class="stat-card projects">
+                    <div class="stat-card-info">
+                        <h3>MY PROJECTS</h3>
+                        <p class="stat-number">3</p>
+                        <span class="stat-meta">+2 this week</span>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-code"></i></div>
+                </div>
+                <div class="stat-card groups">
+                    <div class="stat-card-info">
+                        <h3>STUDY GROUPS</h3>
+                        <p class="stat-number">0</p>
+                        <span class="stat-meta">3 active</span>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                </div>
+                <div class="stat-card assignments">
+                    <div class="stat-card-info">
+                        <h3>ASSIGNMENTS</h3>
+                        <p class="stat-number">3</p>
+                        <span class="stat-meta">2 due soon</span>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+                </div>
+                <div class="stat-card collaboration">
+                    <div class="stat-card-info">
+                        <h3>COLLABORATION</h3>
+                        <p class="stat-number">98%</p>
+                        <span class="stat-meta">activity score</span>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <div class="recent-projects">
+                    <div class="section-header">
+                        <h3><i class="fas fa-history"></i> Recent Projects</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+                    <div class="project-list">
+                        <div class="project-item">
+                            <div>
+                                <h4>React Calculator</h4>
+                                <p>A simple calculator built with React components and hooks.</p>
+                            </div>
+                            <a href="mohit-proj1.html" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+                            <span class="tag react">React</span>
+                        </div>
+                        <!-- Projects will be dynamically inserted here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

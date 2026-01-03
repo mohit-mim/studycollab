@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean UML Class Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            width: 100%;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .diagram-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            overflow: auto;
+            width: 100%;
+        }
+        
+        .uml-canvas {
+            width: 1100px;
+            height: 700px;
+            position: relative;
+            margin: 0 auto;
+            background: #fcfdfd;
+        }
+        
+        .uml-class {
+            position: absolute;
+            width: 220px;
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .class-header {
+            background: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .class-attributes {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .class-methods {
+            padding: 12px;
+        }
+        
+        .attribute, .method {
+            font-family: monospace;
+            margin-bottom: 8px;
+            font-size: 14px;
+            padding-left: 5px;
+        }
+        
+        .relationship-line {
+            position: absolute;
+            background: #7f8c8d;
+            transform-origin: 0 0;
+            z-index: 5;
+        }
+        
+        .relationship-line.one-to-many:after {
+            content: "";
+            position: absolute;
+            right: -10px;
+            top: -5px;
+            border: 5px solid transparent;
+            border-left: 10px solid #7f8c8d;
+        }
+        
+        .relationship-line.dashed {
+            border-style: dashed;
+            background: transparent;
+            border-width: 2px;
+            border-color: #7f8c8d;
+        }
+        
+        .relationship-line.dashed:after {
+            content: "";
+            position: absolute;
+            right: -8px;
+            top: -8px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border: 2px solid #7f8c8d;
+            transform: rotate(45deg);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .relationship-key {
+            margin-top: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .key-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .key-items {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .key-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5px 10px;
+            text-align: center;
+        }
+        
+        .key-symbol {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 1200px) {
+            .uml-canvas {
+                transform: scale(0.8);
+                transform-origin: top center;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .uml-canvas {
+                transform: scale(0.6);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .uml-canvas {
+                transform: scale(0.4);
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Clean UML Class Diagram</h1>
+           
+        </header>
+        
+        <div class="controls">
+            <button id="zoomIn">Zoom In</button>
+            <button id="zoomOut">Zoom Out</button>
+            <button id="toggleAttributes">Toggle Attributes</button>
+            <button id="toggleMethods">Toggle Methods</button>
+            <button id="resetView">Reset View</button>
+        </div>
+        
+        <div class="diagram-container">
+            <div class="uml-canvas">
+                <!-- User Class -->
+                <div class="uml-class" style="top: 50px; left: 440px;">
+                    <div class="class-header">User</div>
+                    <div class="class-attributes">
+                        <div class="attribute">+ userId: String</div>
+                        <div class="attribute">+ name: String</div>
+                        <div class="attribute">+ email: String</div>
+                        <div class="attribute">+ passwordHash: String</div>
+                        <div class="attribute">+ role: String</div>
+                        <div class="attribute">+ createdAt: DateTime</div>
+                    </div>
+                    <div class="class-methods">
+                        <div class="method">+ login()</div>
+                        <div class="method">+ logout()</div>
+                        <div class="method">+ joinSession()</div>
+                    </div>
+                </div>
+                
+                <!-- StudySession Class -->
+                <div class="uml-class" style="top: 350px; left: 140px;">
+                    <div class="class-header">StudySession</div>
+                    <div class="class-attributes">
+                        <div class="attribute">+ sessionId: String</div>
+                        <div class="attribute">+ title: String</div>
+                        <div class="attribute">+ description: String</div>
+                        <div class="attribute">+ createdById: String</div>
+                        <div class="attribute">+ createdAt: DateTime</div>
+                        <div class="attribute">+ isActive: Boolean</div>
+                    </div>
+                    <div class="class-methods">
+                        <div class="method">+ startSession()</div>
+                        <div class="method">+ endSession()</div>
+                        <div class="method">+ addUser()</div>
+                    </div>
+                </div>
+                
+                <!-- Task Class -->
+                <div class="uml-class" style="top: 350px; left: 440px;">
+                    <div class="class-header">Task</div>
+                    <div class="class-attributes">
+                        <div class="attribute">+ taskId: String</div>
+                        <div class="attribute">+ title: String</div>
+                        <div class="attribute">+ description: String</div>
+                        <div class="attribute">+ assignedToId: String</div>
+                        <div class="attribute">+ assignedById: String</div>
+                        <div class="attribute">+ status: String</div>
+                        <div class="attribute">+ dueDate: DateTime</div>
+                    </div>
+                    <div class="class-methods">
+                        <div class="method">+ assignTask()</div>
+                        <div class="method">+ updateStatus()</div>
+                    </div>
+                </div>
+                
+                <!-- Test Class -->
+                <div class="uml-class" style="top: 350px; left: 740px;">
+                    <div class="class-header">Test</div>
+                    <div class="class-attributes">
+                        <div class="attribute">+ testId: String</div>
+                        <div class="attribute">+ title: String</div>
+                        <div class="attribute">+ createdById: String</div>
+                        <div class="attribute">+ questions: String[]</div>
+                        <div class="attribute">+ timeLimit: Duration</div>
+                    </div>
+                    <div class="class-methods">
+                        <div class="method">+ createTest()</div>
+                        <div class="method">+ gradeSubmission()</div>
+                    </div>
+                </div>
+                
+                <!-- CodeEditorSession Class -->
+                <div class="uml-class" style="top: 50px; left: 740px;">
+                    <div class="class-header">CodeEditorSession</div>
+                    <div class="class-attributes">
+                        <div class="attribute">+ editorSessionId: String</div>
+                        <div class="attribute">+ sessionId: String</div>
+                        <div class="attribute">+ language: String</div>
+                        <div class="attribute">+ code: String</div>
+                    </div>
+                    <div class="class-methods">
+                        <div class="method">+ executeCode()</div>
+                        <div class="method">+ updateCode()</div>
+                    </div>
+                </div>
+                
+                <!-- Resource Class -->
+                <div class="uml-class" style="top: 50px; left: 140px;">
+                    <div class="class-header">Resource</div>
+                    <div class="class-attributes">
+                        <div class="attribute">+ resourceId: String</div>
+                        <div class="attribute">+ name: String</div>
+                        <div class="attribute">+ type: String</div>
+                        <div class="attribute">+ uploadedBy: String</div>
+                        <div class="attribute">+ filePath: String</div>
+                        <div class="attribute">+ uploadedAt: DateTime</div>
+                    </div>
+                    <div class="class-methods">
+                        <div class="method">+ upload()</div>
+                        <div class="method">+ download()</div>
+                    </div>
+                </div>
+                
+                <!-- Relationships without text labels -->
+                <div class="relationship-line" style="top: 220px; left: 550px; width: 2px; height: 100px; transform: rotate(90deg);"></div>
+                <div class="relationship-line one-to-many" style="top: 390px; left: 360px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                <div class="relationship-line one-to-many" style="top: 390px; left: 550px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                <div class="relationship-line one-to-many" style="top: 390px; left: 760px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                <div class="relationship-line dashed" style="top: 150px; left: 250px; width: 2px; height: 100px; transform: rotate(45deg);"></div>
+                <div class="relationship-line dashed" style="top: 150px; left: 850px; width: 2px; height: 100px; transform: rotate(135deg);"></div>
+            </div>
+        </div>
+        
+    
+        
+        <footer>
+            <p>Project Management System UML Class Diagram | Clean design with no overlapping text</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const zoomInBtn = document.getElementById('zoomIn');
+            const zoomOutBtn = document.getElementById('zoomOut');
+            const toggleAttributesBtn = document.getElementById('toggleAttributes');
+            const toggleMethodsBtn = document.getElementById('toggleMethods');
+            const resetViewBtn = document.getElementById('resetView');
+            
+            const canvas = document.querySelector('.uml-canvas');
+            const attributes = document.querySelectorAll('.class-attributes');
+            const methods = document.querySelectorAll('.class-methods');
+            
+            let scale = 1;
+            
+            zoomInBtn.addEventListener('click', function() {
+                if (scale < 1.5) {
+                    scale += 0.1;
+                    canvas.style.transform = `scale(${scale})`;
+                }
+            });
+            
+            zoomOutBtn.addEventListener('click', function() {
+                if (scale > 0.5) {
+                    scale -= 0.1;
+                    canvas.style.transform = `scale(${scale})`;
+                }
+            });
+            
+            toggleAttributesBtn.addEventListener('click', function() {
+                attributes.forEach(attr => {
+                    attr.style.display = attr.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+            
+            toggleMethodsBtn.addEventListener('click', function() {
+                methods.forEach(method => {
+                    method.style.display = method.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+            
+            resetViewBtn.addEventListener('click', function() {
+                scale = 1;
+                canvas.style.transform = `scale(${scale})`;
+                attributes.forEach(attr => {
+                    attr.style.display = 'block';
+                });
+                methods.forEach(method => {
+                    method.style.display = 'block';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

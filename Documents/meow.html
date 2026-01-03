@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Dear Friend Nidhi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(to bottom, #1a1a2e, #16213e);
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            max-width: 800px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #e94560;
+            text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+        }
+
+        .message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #f9f9f9;
+            line-height: 1.6;
+        }
+
+        .timer {
+            font-size: 2.5rem;
+            margin: 2rem 0;
+            color: #0fcece;
+            text-shadow: 0 0 10px rgba(15, 206, 206, 0.5);
+            font-weight: bold;
+        }
+
+        .poetry {
+            font-style: italic;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            line-height: 1.8;
+            color: #c5cae9;
+        }
+
+        .heart {
+            color: #e94560;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Rain effect */
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .drop {
+            position: absolute;
+            top: -50px;
+            width: 2px;
+            height: 50px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.6));
+            border-radius: 0 0 5px 5px;
+            animation: rain 2s linear infinite;
+        }
+
+        @keyframes rain {
+            0% {
+                transform: translateY(0) rotate(10deg);
+                opacity: 1;
+            }
+            75% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(10deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Rain background -->
+    <div class="rain" id="rain"></div>
+    
+    <!-- Main content -->
+    <div class="container">
+        <h1>For My Dear Nidhi(Bhonduu) <span class="heart">♥</span></h1>
+        
+        <div class="message">
+            I miss you so muchhhhh! Every day feels incomplete without you.
+        </div>
+        
+        <div class="timer" id="timer">
+            I've missed you for: <span id="time-counter">12 days, 0 hours, 0 minutes, 0 seconds</span>
+        </div>
+        
+        <div class="poetry">
+            <p>"Meet me in the pouring rain,</p>
+            <p>And I would fall for you like every raindrop,</p>
+            <p>Let me tell you about a game I play,
+                "Where I close my eyes and evertime you apperaed 
+                as beautiful as flower that has just bloomed"</p>
+        </div>
+    </div>
+
+    <script>
+        // Create rain effect
+        function createRain() {
+            const rainContainer = document.getElementById('rain');
+            const dropCount = 150;
+            
+            for (let i = 0; i < dropCount; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('drop');
+                
+                // Random properties for each raindrop
+                const left = Math.random() * 100;
+                const animationDuration = Math.random() * 1 + 1;
+                const animationDelay = Math.random() * 2;
+                const height = Math.random() * 20 + 30;
+                
+                drop.style.left = left + 'vw';
+                drop.style.animationDuration = animationDuration + 's';
+                drop.style.animationDelay = animationDelay + 's';
+                drop.style.height = height + 'px';
+                
+                rainContainer.appendChild(drop);
+            }
+        }
+        
+        // Timer function
+        function updateTimer() {
+            // Set the date you last met (12 days ago from now)
+            const lastMet = new Date();
+            lastMet.setDate(lastMet.getDate() - 12);
+            
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - lastMet;
+                
+                // Calculate days, hours, minutes, seconds
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('time-counter').textContent = 
+                    `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+            }, 1000);
+        }
+        
+        // Initialize everything when page loads
+        window.onload = function() {
+            createRain();
+            updateTimer();
+        };
+    </script>
+</body>
+</html>

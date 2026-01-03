@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Study Platform - ER Diagram & DFD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            width: 100%;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab-button.active {
+            background: #2c3e50;
+        }
+        
+        .tab-button:hover {
+            background: #2980b9;
+        }
+        
+        .diagram-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+            overflow: auto;
+            width: 100%;
+            min-height: 600px;
+        }
+        
+        .diagram {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .diagram.active {
+            display: block;
+        }
+        
+        /* ER Diagram Styles */
+        .er-canvas {
+            width: 1100px;
+            height: 550px;
+            position: relative;
+            margin: 0 auto;
+            background: #fcfdfd;
+        }
+        
+        .entity {
+            position: absolute;
+            width: 220px;
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .entity-header {
+            background: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .entity-attributes {
+            padding: 12px;
+        }
+        
+        .attribute {
+            font-family: monospace;
+            margin-bottom: 8px;
+            font-size: 14px;
+            padding-left: 5px;
+        }
+        
+        .pk {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .fk {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .relationship {
+            position: absolute;
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .line {
+            position: absolute;
+            background: #7f8c8d;
+            transform-origin: 0 0;
+            z-index: 5;
+        }
+        
+        .line.one-to-many:after {
+            content: "";
+            position: absolute;
+            right: -10px;
+            top: -5px;
+            border: 5px solid transparent;
+            border-left: 10px solid #7f8c8d;
+        }
+        
+        /* DFD Styles */
+        .dfd-canvas {
+            width: 1000px;
+            height: 550px;
+            position: relative;
+            margin: 0 auto;
+            background: #fcfdfd;
+        }
+        
+        .process {
+            position: absolute;
+            width: 120px;
+            height: 60px;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .data-store {
+            position: absolute;
+            width: 120px;
+            height: 60px;
+            background: white;
+            border: 2px solid #2c3e50;
+            border-left: 20px solid #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .external {
+            position: absolute;
+            width: 100px;
+            height: 60px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .data-flow {
+            position: absolute;
+            background: #7f8c8d;
+            transform-origin: 0 0;
+            z-index: 5;
+        }
+        
+        .data-flow:after {
+            content: "";
+            position: absolute;
+            right: -8px;
+            top: -5px;
+            border: 5px solid transparent;
+            border-left: 10px solid #7f8c8d;
+        }
+        
+        .flow-label {
+            position: absolute;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .legend {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .legend-items {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border: 2px solid;
+        }
+        
+        .color-pk {
+            background: #e74c3c;
+            border-color: #c0392b;
+        }
+        
+        .color-fk {
+            background: #2ecc71;
+            border-color: #27ae60;
+        }
+        
+        .color-process {
+            background: #3498db;
+            border-color: #2980b9;
+        }
+        
+        .color-data-store {
+            background: white;
+            border-color: #2c3e50;
+            border-left: 5px solid #2c3e50;
+        }
+        
+        .color-external {
+            background: #e74c3c;
+            border-color: #c0392b;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 1200px) {
+            .er-canvas, .dfd-canvas {
+                transform: scale(0.8);
+                transform-origin: top center;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .er-canvas, .dfd-canvas {
+                transform: scale(0.6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Virtual Study Platform - Diagrams</h1>
+            <p class="description">
+                Entity-Relationship Diagram and Data Flow Diagram for the Virtual Study Platform
+            </p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="showDiagram('er-diagram')">ER Diagram</button>
+            <button class="tab-button" onclick="showDiagram('dfd-diagram')">Data Flow Diagram</button>
+        </div>
+        
+        <div class="diagram-container">
+            <!-- ER Diagram -->
+            <div id="er-diagram" class="diagram active">
+                <div class="er-canvas">
+                    <!-- User Entity -->
+                    <div class="entity" style="top: 50px; left: 440px;">
+                        <div class="entity-header">User</div>
+                        <div class="entity-attributes">
+                            <div class="attribute"><span class="pk">user_id</span> (PK)</div>
+                            <div class="attribute">name: VARCHAR(100)</div>
+                            <div class="attribute">email: VARCHAR(255)</div>
+                            <div class="attribute">password_hash: VARCHAR(255)</div>
+                            <div class="attribute">role: ENUM('student', 'teacher', 'admin')</div>
+                            <div class="attribute">created_at: DATETIME</div>
+                        </div>
+                    </div>
+                    
+                    <!-- StudySession Entity -->
+                    <div class="entity" style="top: 350px; left: 140px;">
+                        <div class="entity-header">StudySession</div>
+                        <div class="entity-attributes">
+                            <div class="attribute"><span class="pk">session_id</span> (PK)</div>
+                            <div class="attribute">title: VARCHAR(255)</div>
+                            <div class="attribute">description: TEXT</div>
+                            <div class="attribute"><span class="fk">created_by</span> (FK to User)</div>
+                            <div class="attribute">created_at: DATETIME</div>
+                            <div class="attribute">is_active: BOOLEAN</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Task Entity -->
+                    <div class="entity" style="top: 350px; left: 440px;">
+                        <div class="entity-header">Task</div>
+                        <div class="entity-attributes">
+                            <div class="attribute"><span class="pk">task_id</span> (PK)</div>
+                            <div class="attribute">title: VARCHAR(255)</div>
+                            <div class="attribute">description: TEXT</div>
+                            <div class="attribute"><span class="fk">assigned_to</span> (FK to User)</div>
+                            <div class="attribute"><span class="fk">assigned_by</span> (FK to User)</div>
+                            <div class="attribute">status: ENUM('pending', 'in progress', 'completed')</div>
+                            <div class="attribute">due_date: DATETIME</div>
+                            <div class="attribute"><span class="fk">session_id</span> (FK to StudySession)</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Test Entity -->
+                    <div class="entity" style="top: 350px; left: 740px;">
+                        <div class="entity-header">Test</div>
+                        <div class="entity-attributes">
+                            <div class="attribute"><span class="pk">test_id</span> (PK)</div>
+                            <div class="attribute">title: VARCHAR(255)</div>
+                            <div class="attribute"><span class="fk">created_by</span> (FK to User)</div>
+                            <div class="attribute">questions: JSON</div>
+                            <div class="attribute">time_limit: INT</div>
+                            <div class="attribute"><span class="fk">session_id</span> (FK to StudySession)</div>
+                        </div>
+                    </div>
+                    
+                    <!-- CodeEditorSession Entity -->
+                    <div class="entity" style="top: 50px; left: 740px;">
+                        <div class="entity-header">CodeEditorSession</div>
+                        <div class="entity-attributes">
+                            <div class="attribute"><span class="pk">editor_session_id</span> (PK)</div>
+                            <div class="attribute"><span class="fk">session_id</span> (FK to StudySession)</div>
+                            <div class="attribute">language: VARCHAR(50)</div>
+                            <div class="attribute">code: TEXT</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Resource Entity -->
+                    <div class="entity" style="top: 50px; left: 140px;">
+                        <div class="entity-header">Resource</div>
+                        <div class="entity-attributes">
+                            <div class="attribute"><span class="pk">resource_id</span> (PK)</div>
+                            <div class="attribute">name: VARCHAR(255)</div>
+                            <div class="attribute">type: VARCHAR(50)</div>
+                            <div class="attribute"><span class="fk">uploaded_by</span> (FK to User)</div>
+                            <div class="attribute">file_path: VARCHAR(255)</div>
+                            <div class="attribute">uploaded_at: DATETIME</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Relationships -->
+                    <div class="line one-to-many" style="top: 150px; left: 550px; width: 2px; height: 100px; transform: rotate(90deg);"></div>
+                    <div class="relationship" style="top: 180px; left: 510px;">creates</div>
+                    
+                    <div class="line one-to-many" style="top: 390px; left: 360px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                    <div class="relationship" style="top: 410px; left: 300px;">has</div>
+                    
+                    <div class="line one-to-many" style="top: 390px; left: 550px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                    <div class="relationship" style="top: 410px; left: 510px;">assigns</div>
+                    
+                    <div class="line one-to-many" style="top: 390px; left: 760px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                    <div class="relationship" style="top: 410px; left: 720px;">contains</div>
+                    
+                    <div class="line one-to-many" style="top: 150px; left: 250px; width: 2px; height: 100px; transform: rotate(45deg);"></div>
+                    <div class="relationship" style="top: 170px; left: 180px;">uploads</div>
+                    
+                    <div class="line one-to-many" style="top: 150px; left: 850px; width: 2px; height: 100px; transform: rotate(135deg);"></div>
+                    <div class="relationship" style="top: 170px; left: 820px;">uses</div>
+                </div>
+            </div>
+            
+            <!-- Data Flow Diagram -->
+            <div id="dfd-diagram" class="diagram">
+                <div class="dfd-canvas">
+                    <!-- External Entities -->
+                    <div class="external" style="top: 50px; left: 50px;">Student</div>
+                    <div class="external" style="top: 50px; left: 850px;">Teacher</div>
+                    <div class="external" style="top: 500px; left: 50px;">Admin</div>
+                    
+                    <!-- Processes -->
+                    <div class="process" style="top: 150px; left: 200px;">User<br>Management</div>
+                    <div class="process" style="top: 150px; left: 450px;">Study Session<br>Management</div>
+                    <div class="process" style="top: 150px; left: 700px;">Code<br>Collaboration</div>
+                    <div class="process" style="top: 350px; left: 200px;">Resource<br>Management</div>
+                    <div class="process" style="top: 350px; left: 450px;">Task<br>Management</div>
+                    <div class="process" style="top: 350px; left: 700px;">Test<br>Management</div>
+                    
+                    <!-- Data Stores -->
+                    <div class="data-store" style="top: 250px; left: 350px;">User DB</div>
+                    <div class="data-store" style="top: 250px; left: 600px;">Session DB</div>
+                    <div class="data-store" style="top: 450px; left: 350px;">Resource DB</div>
+                    <div class="data-store" style="top: 450px; left: 600px;">Task DB</div>
+                    
+                    <!-- Data Flows - Student -->
+                    <div class="data-flow" style="top: 80px; left: 150px; width: 2px; height: 70px; transform: rotate(90deg);"></div>
+                    <div class="flow-label" style="top: 100px; left: 120px;">Login Data</div>
+                    
+                    <div class="data-flow" style="top: 180px; left: 260px; width: 2px; height: 70px; transform: rotate(180deg);"></div>
+                    <div class="flow-label" style="top: 200px; left: 230px;">Session Request</div>
+                    
+                    <div class="data-flow" style="top: 180px; left: 510px; width: 2px; height: 70px; transform: rotate(180deg);"></div>
+                    <div class="flow-label" style="top: 200px; left: 480px;">Code Submission</div>
+                    
+                    <div class="data-flow" style="top: 380px; left: 260px; width: 2px; height: 70px; transform: rotate(180deg);"></div>
+                    <div class="flow-label" style="top: 400px; left: 230px;">Resource Request</div>
+                    
+                    <!-- Data Flows - Teacher -->
+                    <div class="data-flow" style="top: 80px; left: 900px; width: 2px; height: 70px; transform: rotate(90deg);"></div>
+                    <div class="flow-label" style="top: 100px; left: 870px;">Create Content</div>
+                    
+                    <div class="data-flow" style="top: 180px; left: 640px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                    <div class="flow-label" style="top: 200px; left: 600px;">Create Session</div>
+                    
+                    <div class="data-flow" style="top: 380px; left: 510px; width: 2px; height: 70px; transform: rotate(180deg);"></div>
+                    <div class="flow-label" style="top: 400px; left: 480px;">Assign Task</div>
+                    
+                    <div class="data-flow" style="top: 380px; left: 640px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                    <div class="flow-label" style="top: 400px; left: 600px;">Create Test</div>
+                    
+                    <!-- Data Flows - Admin -->
+                    <div class="data-flow" style="top: 530px; left: 150px; width: 2px; height: 70px; transform: rotate(90deg);"></div>
+                    <div class="flow-label" style="top: 550px; left: 120px;">System Config</div>
+                    
+                    <!-- Data Flows to Data Stores -->
+                    <div class="data-flow" style="top: 250px; left: 320px; width: 2px; height: 70px; transform: rotate(180deg);"></div>
+                    <div class="flow-label" style="top: 270px; left: 290px;">User Data</div>
+                    
+                    <div class="data-flow" style="top: 250px; left: 470px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                    <div class="flow-label" style="top: 270px; left: 430px;">Session Data</div>
+                    
+                    <div class="data-flow" style="top: 450px; left: 320px; width: 2px; height: 70px; transform: rotate(180deg);"></div>
+                    <div class="flow-label" style="top: 470px; left: 290px;">Resource Data</div>
+                    
+                    <div class="data-flow" style="top: 450px; left: 470px; width: 2px; height: 70px; transform: rotate(0deg);"></div>
+                    <div class="flow-label" style="top: 470px; left: 430px;">Task Data</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-title">Diagram Legend</div>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color color-pk"></div>
+                    <div>Primary Key (PK)</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color color-fk"></div>
+                    <div>Foreign Key (FK)</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color color-process"></div>
+                    <div>Process</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color color-data-store"></div>
+                    <div>Data Store</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color color-external"></div>
+                    <div>External Entity</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Virtual Study Platform - ER Diagram & Data Flow Diagram</p>
+        </footer>
+    </div>
+
+    <script>
+        function showDiagram(diagramId) {
+            // Hide all diagrams
+            document.querySelectorAll('.diagram').forEach(diagram => {
+                diagram.classList.remove('active');
+            });
+            
+            // Show selected diagram
+            document.getElementById(diagramId).classList.add('active');
+            
+            // Update active tab button
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
