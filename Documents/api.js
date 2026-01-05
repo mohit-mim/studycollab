@@ -10,7 +10,7 @@ const isLocalhost = window.location.hostname === 'localhost' || window.location.
 // API Configuration
 const API_CONFIG = {
     // IMPORTANT: Update this with your Render backend URL after deployment
-    PRODUCTION_URL: 'https://studycollab-backend.onrender.com/api',
+    PRODUCTION_URL: 'https://studycollab.onrender.com/api',
 
     // Local development URL
     LOCAL_URL: 'http://localhost:5001/api',
