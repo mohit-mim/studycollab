@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+header {
+    background: #35424a;
+    color: #ffffff;
+    padding: 10px 0;
+}
+
+header .logo {
+    float: left;
+}
+
+header .nav-links {
+    float: right;
+}
+
+header .nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 15px;
+}
+
+header .nav-links a:hover {
+    background: #e8491d;
+}
+
+.sidebar {
+    background: #35424a;
+    color: #ffffff;
+    padding: 15px;
+    width: 250px;
+    float: left;
+}
+
+.sidebar-title {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu .project-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.sidebar-menu .project-item.active {
+    background: #e8491d;
+}
+
+.main-content {
+    margin-left: 270px;
+    padding: 15px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background: #35424a;
+    color: #ffffff;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.btn {
+    background: #e8491d;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #35424a;
+}
+
+.footer {
+    text-align: center;
+    padding: 10px;
+    background: #35424a;
+    color: #ffffff;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
